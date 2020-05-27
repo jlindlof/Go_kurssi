@@ -2,6 +2,7 @@
 
 Mac:
 
+
 <img width="654" alt="Screenshot 2020-05-27 at 3 04 57" src="https://user-images.githubusercontent.com/10086608/82962720-a729d180-9fc9-11ea-8589-de5cac403bcd.png">
 
 
@@ -9,8 +10,10 @@ Mac:
 
 Windows:
 
+
 <img width="648" alt="Screenshot 2020-05-27 at 3 02 41" src="https://user-images.githubusercontent.com/10086608/82962758-c9bbea80-9fc9-11ea-8fef-2b4888082161.png">
 
 Linux:
+
 
 <img width="690" alt="Screenshot 2020-05-27 at 3 05 50" src="https://user-images.githubusercontent.com/10086608/82962800-e9eba980-9fc9-11ea-8768-cf3ddfc927ad.png">
