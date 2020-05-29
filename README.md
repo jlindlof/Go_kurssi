@@ -7,3 +7,4 @@ Course assignnments for Go Programming Course (http://terokarvinen.com/2020/go-p
 - https://gobyexample.com
 - https://golang.org/doc/
 - Examples on lectures
+- https://www.alphavantage.co/documentation/ (For the Project)
