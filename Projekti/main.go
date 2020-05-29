@@ -1,11 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"
+	"net/http"
 	"strconv"
 )
 
@@ -23,59 +22,54 @@ type Currency struct {
 
 func main() {
 
-	menu()
+	fmt.Print("Currency to exchange from: ")
+	currencyFrom := readInput()
+	fmt.Print("Currency to exchange to: ")
+	currencyTo := readInput()
+	fmt.Print("Currency ammount to exchange: ")
+	ammount := readInput()
 
+	loadJSON(currencyFrom, currencyTo, ammount)
 }
 
-func CalculateCurrency(rate float64, ammount int) float64 {
-
-	floatammount := float64(ammount)
-
-	return floatammount * rate
-}
-
-func menu() {
-
-	fmt.Println("#### Currency Excange ####")
-	fmt.Print("Give Currency you want excange from : ")
-	fromCurrency := readInput()
-	fmt.Print("Give Currency you want excange to : ")
-	toCurrency := readInput()
-	fmt.Print("Ammount to excange : ")
-
-	fmt.Println("#### Currency Excange Rate ####")
-	fmt.Print(fromCurrency, toCurrency)
-
-}
-
+//Helper function to read user input
 func readInput() string {
-	reader := bufio.NewReader(os.Stdin)
-	input, _ := reader.ReadString('\n')
-
+	var input string
+	fmt.Scanln(&input)
 	return input
 }
 
-func loadData() {
-	jsonFile, err := os.Open("data.json")
+func loadJSON(fromCurrency string, toCurrency string, ammount string) {
+	url := getCurrencyExchangeURL(fromCurrency, toCurrency)
+	var exchange ExchangeData
 
+	//just for test to see api url generated
+	//fmt.Println(url)
+
+	var client http.Client
+	resp, err := client.Get(url)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println("Opened data.json")
+	defer resp.Body.Close()
 
-	defer jsonFile.Close()
+	if resp.StatusCode == http.StatusOK {
+		bodyBytes, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
 
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+		}
+		//Just for testing to see what i get
+		//bodyString := string(bodyBytes)
+		//fmt.Println(bodyString)
 
-	var exchange ExchangeData
+		json.Unmarshal(bodyBytes, &exchange)
+		floatammount, _ := strconv.ParseFloat(ammount, 64)
+		exchangeFloat, _ := strconv.ParseFloat(exchange.ExchangeData.ExchangeRate, 64)
 
-	json.Unmarshal(byteValue, &exchange)
+		result := floatammount * exchangeFloat
+		fmt.Println("### Result ###")
+		fmt.Println(result, exchange.ExchangeData.CurrencyToName)
+	}
 
-	fmt.Println(exchange.ExchangeData.CurrencyFromCode)
-	fmt.Println(exchange.ExchangeData.CurrencyToCode)
-	exchangeFloat, _ := strconv.ParseFloat(exchange.ExchangeData.ExchangeRate, 64)
-	fmt.Println(exchangeFloat)
-	result := CalculateCurrency(exchangeFloat, 100)
-	fmt.Println(result)
 }
